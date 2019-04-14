@@ -1,6 +1,7 @@
 from crawler import Crawler
 import os
-
+import time
+from tqdm import tqdm
 
 class Bot:
     def __init__(self, db):
@@ -16,10 +17,10 @@ class Bot:
         self.mod.is_done = 1
         self.mod.save()
         try:
-            for link in links:
+            for link in tqdm(links, desc=self.mod.url):
                 count = self.db.select().where(self.db.url == link).count()
                 i += 1
-                print('Link: {} {}/{}'.format(self.mod.url, i, link_count))
+                # print('Link: {} {}/{}'.format(self.mod.url, i, link_count))
                 if count > 0:
                     continue
                 else:
