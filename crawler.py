@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 
+
 class Crawler:
     url = ''
     found_urls = []
@@ -26,6 +27,8 @@ class Crawler:
                 if str(link['href']).startswith('//') is True:
                     pass
                 elif str(link['href']).startswith('/') is True:
+                    pass
+                elif str(link['href']).startswith('#') is True:
                     pass
                 else:
                     self.found_urls.append(link['href'])
