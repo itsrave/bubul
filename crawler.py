@@ -5,6 +5,7 @@ import requests
 class Crawler:
     url = ''
     found_urls = []
+    found_imgs = []
     ignored = 0
 
     def get_url(self) -> str:
@@ -32,3 +33,14 @@ class Crawler:
                 self.ignored += 1
 
         return self.found_urls
+
+    def search_images(self) -> list:
+        r = requests.get(self.url)
+        soup = BeautifulSoup(r.content, 'html.parser')
+        links = soup.find_all('img')
+        for link in links:
+            try:
+                self.found_imgs.append(link['src'])
+            except:
+                self.ignored += 1
+        return self.found_imgs
