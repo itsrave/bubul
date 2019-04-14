@@ -26,8 +26,11 @@ class LinkCrawler(Crawler):
     def search(self):
         r = requests.get(self.search_link)
         soup = BeautifulSoup(r.content, 'html.parser')
-        links = soup.find_all('a')
-
+        try:
+            links = soup.find_all('a')
+            title = soup.find('title').text
+        except:
+            pass
         for link in links:
             try:
                 if str(link['href']).startswith('http') is True:
@@ -37,7 +40,8 @@ class LinkCrawler(Crawler):
             except:
                 self.ignored += 1
 
-        return self.found_urls
+        return self.found_urls, title
+
 
 
 class ImageCrawler(Crawler):
