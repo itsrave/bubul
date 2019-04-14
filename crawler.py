@@ -5,6 +5,7 @@ import requests
 class Crawler:
     url = ''
     found_urls = []
+    ignored = 0
 
     def get_url(self) -> str:
         return self.url
@@ -20,6 +21,7 @@ class Crawler:
         r = requests.get(self.url)
         soup = BeautifulSoup(r.content, 'html.parser')
         links = soup.find_all('a')
+
         for link in links:
             try:
                 if str(link['href']).startswith('//') is True:
@@ -29,5 +31,6 @@ class Crawler:
                 else:
                     self.found_urls.append(link['href'])
             except:
-                pass
+                self.ignored += 1
+
         return self.found_urls
