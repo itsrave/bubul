@@ -14,18 +14,14 @@ class Finder:
 
 
 class LinkFinder(Finder):
-    def __init__(self, url):
-        if url is '':
-            try:
-                mod = Link.select().where(Link.is_done == 0).first()
-                mod.is_done = 1
-                mod.save()
-
-                self.url = mod.url
-            except:
-                print('Wystapil blad podczas tworzenia modelu. Plik Finder.py')
-        else:
-            self.url = url
+    def __init__(self):
+        try:
+            mod = Link.select().where(Link.is_done == 0).first()
+            mod.is_done = 1
+            mod.save()
+            self.url = mod.url
+        except:
+            print('Wystapil blad podczas tworzenia modelu. Plik Finder.py (Brak nowych linkow)')
 
     def start(self):
         links = None
@@ -55,7 +51,7 @@ class ImageFinder(Finder):
 
                 self.url = mod.url
             except:
-                print('Wystapil blad podczas tworzenia modelu. Plik Finder.py')
+                pass # print('Wystapil blad podczas tworzenia modelu. Plik Finder.py')
         else:
             self.url = url
 
@@ -65,7 +61,7 @@ class ImageFinder(Finder):
         try:
             images = ImageCrawler().set_url(self.url).search()
         except:
-            print('Wystapil blad podczas szukania zdjec.')
+            pass # print('Wystapil blad podczas szukania zdjec.')
 
         try:
             for image in tqdm(images, desc=self.url):
@@ -74,4 +70,4 @@ class ImageFinder(Finder):
                 if count == 0:
                     Img.create(url=image, is_done=0)
         except:
-            print('Blad...')
+            pass # print('Blad...')
