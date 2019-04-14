@@ -24,14 +24,10 @@ class Crawler:
 
         for link in links:
             try:
-                if str(link['href']).startswith('//') is True:
-                    pass
-                elif str(link['href']).startswith('/') is True:
-                    pass
-                elif str(link['href']).startswith('#') is True:
-                    pass
-                else:
+                if str(link['href']).startswith('http') is True:
                     self.found_urls.append(link['href'])
+                else:
+                    pass
             except:
                 self.ignored += 1
 
