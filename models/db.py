@@ -1,3 +1,3 @@
 from peewee import *
 
-db = MySQLDatabase('bubul', user='root1', passwd='123456')
+db = MySQLDatabase('bubul', user='s314wp1', passwd='123456')

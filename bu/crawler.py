@@ -6,7 +6,7 @@ class Crawler:
     search_link = ''
     ignored = 0
 
-    def search(self) -> list:
+    def search(self) -> dict:
         pass
 
     def set_url(self, url):
@@ -16,6 +16,9 @@ class Crawler:
     def get_url(self) -> str:
         return self.search_link
 
+    def get_ignored(self) -> int:
+        return self.ignored
+
 
 class LinkCrawler(Crawler):
     found_urls = []
@@ -24,24 +27,30 @@ class LinkCrawler(Crawler):
         return self.found_urls
 
     def search(self):
+        links = None
+        title = None
+
         r = requests.get(self.search_link)
         soup = BeautifulSoup(r.content, 'html.parser')
+
         try:
             links = soup.find_all('a')
             title = soup.find('title').text
-        except:
-            pass
+        except Exception as e:
+            print(e)
+
         for link in links:
             try:
                 if str(link['href']).startswith('http') is True:
                     self.found_urls.append(link['href'])
-                else:
-                    pass
-            except:
+            except Exception as e:
                 self.ignored += 1
+                print(e)
 
-        return self.found_urls, title
-
+        return {
+            'links': self.found_urls,
+            'title': title
+        }
 
 
 class ImageCrawler(Crawler):
@@ -58,7 +67,10 @@ class ImageCrawler(Crawler):
         for link in links:
             try:
                 self.found_imgs.append(link['src'])
-            except:
+            except Exception as e:
                 self.ignored += 1
+                print(e)
 
-        return self.found_imgs
+        return {
+            'links': self.found_imgs
+        }
