@@ -21,7 +21,7 @@ if __name__ == '__main__':
         c = LinkFinder()
         c.start()
         if killer.kill_now:
-            print('Please wait... saving to db')
+            c.save()
             break
 
     print("I was killed gracefully :)")

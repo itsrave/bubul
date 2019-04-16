@@ -7,7 +7,7 @@ class Link(Model):
     url = CharField()
     is_done = BooleanField()
     title = CharField()
-    db.connect(reuse_if_open=True)
+
 
     class Meta:
         database = db

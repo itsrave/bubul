@@ -3,9 +3,11 @@ from bu.crawler import ImageCrawler
 from models.link import Link
 from models.img import Img
 from tqdm import tqdm
+from models.db import db
 
 
 class Finder:
+    db.connect(reuse_if_open=True)
     id = None
     url = None
     title = None
@@ -17,7 +19,7 @@ class Finder:
 
 class LinkFinder(Finder):
     def __init__(self):
-
+        urls = []
         try:
             mod = Link.select().where(Link.is_done == 0).first()
 
@@ -29,12 +31,12 @@ class LinkFinder(Finder):
 
             self.id = mod.id
             self.url = mod.url
+            self.urls = urls
         except Exception as e:
             print(e)
 
     def start(self):
         links = None
-
         try:
             data = LinkCrawler().set_url(self.url).search()
 
@@ -50,10 +52,15 @@ class LinkFinder(Finder):
                 count = Link.select().where(Link.url == link).count()
 
                 if count == 0:
-                    self._create_field(link)
+                    self.urls.append(link)
+
         except Exception as e:
             print(e)
-    
+
+    def save(self):
+        for link in tqdm(self.urls, desc="Saving to db"):
+            self._create_field(link)
+        db.close()
 
     def _update_title(self, title):
         mod = Link.select().where(Link.id == self.id).first()
