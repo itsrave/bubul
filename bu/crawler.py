@@ -40,12 +40,8 @@ class LinkCrawler(Crawler):
             print(e)
 
         for link in links:
-            try:
-                if str(link['href']).startswith('http') is True:
-                    self.found_urls.append(link['href'])
-            except Exception as e:
-                self.ignored += 1
-                print(e)
+            if str(link['href']).startswith('http') is True:
+                self.found_urls.append(link['href'])
 
         return {
             'links': self.found_urls,

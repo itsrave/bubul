@@ -17,6 +17,7 @@ class Finder:
 
 class LinkFinder(Finder):
     def __init__(self):
+
         try:
             mod = Link.select().where(Link.is_done == 0).first()
 
@@ -29,7 +30,7 @@ class LinkFinder(Finder):
             self.id = mod.id
             self.url = mod.url
         except Exception as e:
-            print('1. ' + str(e))
+            print(e)
 
     def start(self):
         links = None
@@ -52,6 +53,7 @@ class LinkFinder(Finder):
                     self._create_field(link)
         except Exception as e:
             print(e)
+    
 
     def _update_title(self, title):
         mod = Link.select().where(Link.id == self.id).first()
